@@ -10,7 +10,6 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import { CryptoContext } from "../ContextApi/CryptoContext";
-import githubIcon from "../assets/github-fill.svg";
 
 function CustomTooltip({ payload, label, active, currency = "usd" }) {
   if (active && payload && payload.length > 0) {

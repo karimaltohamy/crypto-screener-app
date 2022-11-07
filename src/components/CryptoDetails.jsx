@@ -11,7 +11,7 @@ const Indicator = ({ currentPrice, low, hight }) => {
     let total = hight - low;
     let greenZone = ((hight - currentPrice) * 100) / total;
     setGreen(Math.ceil(greenZone));
-  }, []);
+  }, [currentPrice, hight, low]);
 
   return (
     <div className="flex justify-between items-center">
@@ -38,7 +38,7 @@ const CryptoDetails = () => {
 
   useLayoutEffect(() => {
     getCoinDetails(coinId);
-  }, []);
+  }, [getCoinDetails, coinId]);
 
   return ReactDOM.createPortal(
     <div

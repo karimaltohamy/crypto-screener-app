@@ -3,6 +3,7 @@ import React, {
   useContext,
   useEffect,
   useLayoutEffect,
+  useCallback,
   useState,
 } from "react";
 import { CryptoContext } from "./CryptoContext";
@@ -14,6 +15,21 @@ export const SevedProvider = ({ children }) => {
   const [coinsSaved, setCoinsSaved] = useState();
 
   const { currency, order } = useContext(CryptoContext);
+
+  const getCoinsSaved = async (savedCoins = allCoins) => {
+    try {
+      const data = await fetch(
+        `https://api.coingecko.com/api/v3/coins/markets?vs_currency=${currency}&ids=${savedCoins.join(
+          ","
+        )}&order=${order}&sparkline=false&price_change_percentage=1h%2C24h%2C7d`
+      )
+        .then((res) => res.json())
+        .then((data) => data);
+      setCoinsSaved(data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   const savedCoin = (coinId) => {
     const oldCoins = JSON.parse(localStorage.getItem("coins"));
@@ -33,21 +49,6 @@ export const SevedProvider = ({ children }) => {
     const filtercoins = oldCoins.filter((item) => item !== coinId);
     setAllCoins(filtercoins);
     localStorage.setItem("coins", JSON.stringify(filtercoins));
-  };
-
-  const getCoinsSaved = async (savedCoins = allCoins) => {
-    try {
-      const data = await fetch(
-        `https://api.coingecko.com/api/v3/coins/markets?vs_currency=${currency}&ids=${savedCoins.join(
-          ","
-        )}&order=${order}&sparkline=false&price_change_percentage=1h%2C24h%2C7d`
-      )
-        .then((res) => res.json())
-        .then((data) => data);
-      setCoinsSaved(data);
-    } catch (error) {
-      console.error(error);
-    }
   };
 
   const resetSavedCoins = () => {

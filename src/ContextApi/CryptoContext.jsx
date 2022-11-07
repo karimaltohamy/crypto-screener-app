@@ -15,30 +15,6 @@ export const CryptoProvider = ({ children }) => {
 
   const [coinDetails, setCoinDetails] = useState();
 
-  const getCryptoData = async () => {
-    try {
-      const data = await fetch(`https://api.coingecko.com/api/v3/coins/list`)
-        .then((res) => res.json())
-        .then((data) => data);
-
-      setTotalPage(data.length);
-    } catch (error) {
-      console.error(error);
-    }
-
-    try {
-      const data = await fetch(
-        `https://api.coingecko.com/api/v3/coins/markets?vs_currency=${currency}&ids=${coinSelected}&order=${order}&per_page=${perPage}&page=${page}&sparkline=false&price_change_percentage=1h%2C24h%2C7d`
-      )
-        .then((res) => res.json())
-        .then((data) => data);
-
-      setCryptoData(data);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
   const resetCtyptoFun = () => {
     setPage(1);
     setCoinSelected("");
@@ -73,6 +49,29 @@ export const CryptoProvider = ({ children }) => {
   };
 
   useLayoutEffect(() => {
+    const getCryptoData = async () => {
+      try {
+        const data = await fetch(`https://api.coingecko.com/api/v3/coins/list`)
+          .then((res) => res.json())
+          .then((data) => data);
+
+        setTotalPage(data.length);
+      } catch (error) {
+        console.error(error);
+      }
+
+      try {
+        const data = await fetch(
+          `https://api.coingecko.com/api/v3/coins/markets?vs_currency=${currency}&ids=${coinSelected}&order=${order}&per_page=${perPage}&page=${page}&sparkline=false&price_change_percentage=1h%2C24h%2C7d`
+        )
+          .then((res) => res.json())
+          .then((data) => data);
+
+        setCryptoData(data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
     getCryptoData();
   }, [coinSelected, currency, order, page, perPage]);
 
